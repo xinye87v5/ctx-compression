@@ -1,0 +1,8 @@
+node_modules/
+__pycache__/
+*.pyc
+.publish/
+.DS_Store
+# 本仓库**刻意不含**原始会话数据（见 README「关于数据」）
+data/
+*.jsonl.zstd
