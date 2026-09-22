@@ -45,7 +45,7 @@ test('shapeOk / relativeOk：段形与扩展名两道闸门', () => {
   assert.equal(relativeOk('ops/systemd/orbit-reconcile.timer'), true);
   assert.equal(relativeOk('scripts/run-ledger-checks.mjs'), true);
   assert.equal(relativeOk('Completed/Active'), false, '末段无扩展名');
-  assert.equal(relativeOk('probe/core/signals'), false, '末段无扩展名');
+  assert.equal(relativeOk('src/api/handlers'), false, '末段无扩展名');
   assert.ok(KNOWN_EXT.has('mjs') && KNOWN_EXT.has('jsonl'));
 });
 
