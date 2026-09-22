@@ -5,14 +5,21 @@
 
 - **语言**：JavaScript（ESM，`.mjs`）
 - **依赖**：**零第三方依赖**，只用 Node 标准库（`node:fs` / `node:path` / `node:os`）
-- **运行环境**：Node 22（`node --test metrics/` 全绿）
+- **运行环境**：Node 22 —— 80 个测试全绿
 - **纯函数**：五个模块都不读盘（唯一例外：模块 4 的绝对路径判据要用 `existsSync`）；
   读文件全部在 `cli.mjs` 里做
 
 ```bash
-node --test metrics/          # 跑测试
-node metrics/cli.mjs --help   # 看用法
+cd metrics && node --test        # 跑测试（80 个，全绿）
+node cli.mjs --help              # 看用法
 ```
+
+> ⚠️ **不要用 `node --test metrics/`。** 本机 Node **v22.23.2** 上实测：`--test` 的位置参数
+> 不再展开目录，目录会被当成一个待执行的文件，报 `Cannot find module '…/metrics'`。
+> 最小复现：`mkdir x && echo 'import test from "node:test"' > x/a.test.mjs && node --test x`
+> （同样报错）。等价且可用的写法是上面那条，或者从仓库根目录用 glob：
+> `node --test 'metrics/**/*.test.mjs'`。两种写法跑的**是同一批 80 个测试**。
+
 
 ---
 
@@ -304,7 +311,7 @@ cd metrics
 node cli.mjs coverage --events fixtures/events.jsonl --checkpoint fixtures/checkpoint.txt --from 100 --to 900
 ```
 
-预期输出（下面每一行都是 `node --test metrics/` 里断言过的实际输出）：
+预期输出（下面每一行都被 `test/readme.test.mjs` 钉回了 CLI 的实际输出）：
 
 ```
 # 逐字覆盖（模块 1）
@@ -316,7 +323,7 @@ node cli.mjs coverage --events fixtures/events.jsonl --checkpoint fixtures/check
 严格档（阈值 30）  命中 4/6 = 66.7%   被剔除（长度不足） 4/10 条
 宽松档（阈值 12）  命中 6/7 = 85.7%   被剔除（长度不足） 3/10 条
 meanLcsRatio（严格档分母上）  0.7727   最大 1.0000
-支配度 topShare  0.5133（其中 seq=160 一条占 51.3% 的 LCS 总量，len=256）
+支配度 topShare  0.5133（LCS 总量 452 里，seq=160 一条占 232，即 51.3%；len=256）
 ```
 
 怎么读这一屏：
@@ -449,10 +456,14 @@ node cli.mjs degenerate --ranges fixtures/compact-ranges.json
 ## 6. 测试
 
 ```bash
-node --test metrics/          # 或在 metrics/ 下：node --test .
+cd metrics && node --test                       # 80 个测试，全绿（推荐）
+node --test 'metrics/**/*.test.mjs'             # 等价写法（在仓库根目录执行）
 ```
 
-`test/` 下六个文件，覆盖：
+> `node --test metrics/`（位置参数给目录）在本机 Node v22.23.2 上**不可用** —— 见开头的说明，
+> 那是 runner 自己的行为，不是本目录的配置问题。
+
+`test/` 下七个文件，覆盖：
 
 | 文件 | 覆盖什么 |
 |---|---|
@@ -461,7 +472,7 @@ node --test metrics/          # 或在 metrics/ 下：node --test .
 | `corpus.test.mjs` | 逐行容错解析、去重（宽松/严格）、缺 `time` 的降级、来源分类与筛选、`normalizeMeta` 幂等 |
 | `entityExtract.test.mjs` | 主机前缀判定、绝对路径 `existsSync` 三条路径、**斜杠列表必须全拒**、段频否决权、版本/数字/引句、回归用例 |
 | `degenerate.test.mjs` | 三条判据各自成立、边界值（`≤` vs `<`）、缺失 ≠ 0、批量分母 |
-| `cli.test.mjs` | 四个子命令端到端、`--json`、退出码（0 vs 2）、空分母打印 `n/a` |
+| `cli.test.mjs` | 五个子命令端到端、`--json`、退出码（0 vs 2）、空分母打印 `n/a` |
 | `readme.test.mjs` | **README 里的示例数字必须与代码实际输出一致**（防文档漂移） |
 
 **反证**（证明"功能关掉时结果会变"，而不是"看起来在跑"）在四处：

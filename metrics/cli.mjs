@@ -23,9 +23,9 @@ import { basename } from 'node:path';
 
 import { coverage, DEFAULT_THRESHOLD, DEFAULT_LOOSE_THRESHOLD } from './coverage.mjs';
 import { turnFidelity } from './turnFidelity.mjs';
-import { loadEventsDetailed, dedupe, filterByOrigin, originBreakdown, normalizeMeta } from './corpus.mjs';
+import { loadEventsDetailed, dedupe, filterByOrigin, originBreakdown } from './corpus.mjs';
 import { extractEntities, verifyAgainstCorpus } from './entityExtract.mjs';
-import { detectDegenerate, detectDegenerateBatch } from './degenerate.mjs';
+import { detectDegenerateBatch } from './degenerate.mjs';
 
 const USAGE = `用法:
   node metrics/cli.mjs coverage  --events <jsonl> --checkpoint <txt> [--from N] [--to N] [--threshold 30] [--loose 12] [--session S] [--rows] [--json]
@@ -122,8 +122,10 @@ function cmdCoverage(args) {
   console.log(`严格档（阈值 ${threshold}）  命中 ${frac(r.hits, r.denominator)} = ${pct(r.rate)}   被剔除（长度不足） ${r.excluded}/${r.total} 条`);
   console.log(`宽松档（阈值 ${loose}）  命中 ${frac(r.loose.hits, r.loose.denominator)} = ${pct(r.loose.rate)}   被剔除（长度不足） ${r.loose.excluded}/${r.total} 条`);
   console.log(`meanLcsRatio（严格档分母上）  ${r.meanLcsRatio === null ? 'n/a' : r.meanLcsRatio.toFixed(4)}   最大 ${r.maxLcsRatio === null ? 'n/a' : r.maxLcsRatio.toFixed(4)}`);
-  console.log(`支配度 topShare  ${r.topShare === null ? 'n/a' : r.topShare.toFixed(4)}` +
-    (r.top ? `（其中 seq=${r.top.seq} 一条占 ${r.topShare === null ? 'n/a' : pct(r.topShare)} 的 LCS 总量，len=${r.top.len}）` : ''));
+  console.log(`支配度 topShare  ${r.topShare === null ? 'n/a' : r.topShare.toFixed(4)}`
+    + (r.top
+      ? `（LCS 总量 ${r.lcsSum} 里，seq=${r.top.seq} 一条占 ${r.top.lcs}，即 ${pct(r.topShare)}；len=${r.top.len}）`
+      : ''));
 
   if (args.rows) {
     console.log(`\n${pad('seq', 6)}${lpad('len', 6)}${lpad('lcs', 6)}${lpad('ratio', 8)}  判定  文本`);
