@@ -1,0 +1,18 @@
+{"session":"s-root","seq":1,"kind":"user","time":1000,"text":"虚构夹具：根会话的第一条用户发言"}
+{"session":"s-root","seq":2,"kind":"assistant","time":1001,"text":"虚构夹具：助手在 1001 毫秒的回复"}
+{"session":"s-root","seq":3,"kind":"user","time":1001,"text":"虚构夹具：与上一条同毫秒、但 seq 不同的用户发言"}
+{"session":"s-root","seq":4,"kind":"tool","time":1002,"text":"虚构夹具：工具输出"}
+{"session":"s-root","seq":5,"kind":"compaction","time":1003,"text":"start"}
+{"session":"s-root","seq":6,"kind":"compaction","time":1003,"text":"prune"}
+{"session":"s-fork","seq":1,"kind":"user","time":1000,"text":"虚构夹具：根会话的第一条用户发言"}
+{"session":"s-fork","seq":2,"kind":"assistant","time":1001,"text":"虚构夹具：助手在 1001 毫秒的回复"}
+{"session":"s-fork","seq":3,"kind":"user","time":1001,"text":"虚构夹具：与上一条同毫秒、但 seq 不同的用户发言"}
+{"session":"s-fork","seq":4,"kind":"tool","time":1002,"text":"虚构夹具：工具输出"}
+{"session":"s-fork","seq":5,"kind":"compaction","time":1003,"text":"start"}
+{"session":"s-fork","seq":6,"kind":"compaction","time":1003,"text":"prune"}
+{"session":"s-fork","seq":7,"kind":"user","time":2000,"text":"虚构夹具：fork 种子区之后，这个子会话自己产生的发言"}
+{"session":"s-fork2","seq":1,"kind":"user","time":1000,"text":"虚构夹具：根会话的第一条用户发言"}
+{"session":"s-fork2","seq":2,"kind":"assistant","time":1001,"text":"虚构夹具：助手在 1001 毫秒的回复"}
+{"session":"s-sub","seq":1,"kind":"user","time":3000,"text":"虚构夹具：子代理收到的委派提示词（走 user 通道，但不是用户发言）"}
+{"session":"s-sub","seq":2,"kind":"assistant","time":3001,"text":"虚构夹具：子代理的回复"}
+{"session":"s-sub","seq":3,"kind":"user","time":3002,"text":"虚构夹具：子代理收到的第二条委派提示词，注意它常含否定词"}

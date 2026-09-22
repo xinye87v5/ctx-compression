@@ -1,0 +1,26 @@
+# 夜间对账（orbit-ledger）复盘报告
+# ⚠️ 自造合成夹具：域名统一用 example.invalid 之类的保留域，路径全部虚构。
+
+## 结论
+- 调度已切到 systemd，单元文件见 ops/systemd/orbit-reconcile.timer。
+- 差额阈值写在 config/ledger.yaml，取值 0.05，需要再复核一次。
+- 迁移脚本归档到 db/archive/2024-migrations.sql，主分支不再发布。
+- 校验入口 scripts/run-ledger-checks.mjs 保持 34/34 通过。
+
+## 证据
+- 有 scheme 的 URL：https://example.invalid/docs/ledger/reconcile
+- 无 scheme 的主机前缀：raw.githubusercontent.com/acme-labs/orbit-ledger/main/README.md
+- 无 scheme 的主机前缀（第二条）：docs.example.org/guide/setup
+- 版本：v1.4.2 与 0.5.1，以及不带补丁号的 2.0。
+- 计数：本轮 3 轮跑完，处理 12345 条记录，其中 9876 条命中。
+- 原话："the reconcile job must not touch the production schema at all"
+- 对照用的短引句 "too short to qualify" 不应被抽成 quote。
+
+## 被拒候选（判据正确性的自查，这些**不得**出现在 path 里）
+- 状态只有 Completed/Active 两种，不要当成路径。
+- CLI/IDE 两种入口都试过。
+- gh/glab 都能用。
+- 评分列表 12.5/88/3x 曾经被误抽成路径。
+- 缩写并列 AG/MR/HR 同理。
+- 层级 a/b/c 不是路径。
+- 占位绝对路径 /nonexistent-placeholder/dir/file.txt 不存在，父目录也不存在，应被拒。

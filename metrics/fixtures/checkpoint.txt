@@ -1,0 +1,20 @@
+# 压缩摘要（会话 s1）
+# ⚠️ 本文件是**自造的合成夹具**：项目名、事件、数字全部虚构，与任何真实会话无关。
+
+## 已完成
+- 把 nightly-reconcile 的调度从 cron 改成 systemd timer，单元文件在 ops/systemd/orbit-reconcile.timer。
+- 对账差额阈值统一为 0.05，写进 config/ledger.yaml 的 tolerance 字段。
+- 修掉时区问题：所有入库时间统一按 UTC 存，只在展示层做本地化。
+- 旧的 SQL 迁移脚本归档到 db/archive/2024-migrations.sql，不再随主分支发布。
+
+## 未决
+- 幂等键还没定：候选是 (account_id, business_date) 与 (txn_hash)。
+- 回填计划待写，覆盖范围是 2025-01-01 之后的全部历史分区。
+
+## 约束（用户明确要求，不得改动）
+- 不要改生产库的 schema，只允许加索引。
+- 导出文件一律带 UTF-8 BOM，因为下游表格工具会误判编码。
+
+## 产出
+- 夜间报告写入 reports/orbit-ledger-nightly.md。
+- 校验入口是 scripts/run-ledger-checks.mjs，当前 34/34 通过。

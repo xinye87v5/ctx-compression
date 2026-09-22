@@ -1,0 +1,6 @@
+{
+  "s-root": { "origin": "user" },
+  "s-fork": { "origin": "fork", "parent": "s-root" },
+  "s-fork2": { "origin": "fork", "parent": "s-root" },
+  "s-sub": { "origin": "subagent", "parent": "s-root" }
+}

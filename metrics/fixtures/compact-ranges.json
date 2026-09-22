@@ -1,0 +1,20 @@
+[
+  {
+    "session": "s1",
+    "start": 100,
+    "end": 900,
+    "checkpoint": "checkpoint.txt",
+    "shadowedTokens": 48120,
+    "summaryTokens": 1490,
+    "events": 37
+  },
+  {
+    "session": "s1",
+    "start": 910,
+    "end": 911,
+    "checkpoint": "checkpoint.txt",
+    "shadowedTokens": 1500,
+    "summaryTokens": 2600,
+    "events": 2
+  }
+]
